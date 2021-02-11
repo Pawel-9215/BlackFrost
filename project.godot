@@ -82,6 +82,13 @@ move_right={
  ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="Player"
+2d_physics/layer_2="NPC"
+2d_physics/layer_3="Walls"
+2d_physics/layer_4="Items"
+
 [rendering]
 
 quality/driver/driver_name="GLES2"
