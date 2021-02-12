@@ -855,8 +855,8 @@ polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 
 [node name="World" type="Node2D"]
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color( 0.203922, 0.219608, 0.247059, 1 )
+[node name="Darken" type="CanvasModulate" parent="."]
+color = Color( 0.117647, 0.137255, 0.168627, 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 130.546, 102.931 )

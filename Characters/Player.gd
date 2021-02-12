@@ -3,6 +3,7 @@ extends "res://Characters/TemplateCharacter.gd"
 var velocity = Vector2()
 onready var animationTree = $AnimationTree
 onready var AnimationState = $AnimationTree.get("parameters/playback")
+var usingpad = false
 
 func _ready():
 	print("Hello World")
@@ -11,7 +12,16 @@ func _ready():
 func _physics_process(_delta):
 	update_movement()
 	velocity = move_and_slide(velocity)
+	update_animation(usingpad)
 	update_lookat()
+	
+func _input(event): # check if player is using gamepad or keyboard and mouse
+	if event is InputEventMouseMotion and usingpad:
+		print("moved mouse")
+		usingpad = false
+	elif event is InputEventJoypadMotion and not usingpad:
+		print("Joypad moved")
+		usingpad = true
 
 func update_movement():
 	
@@ -22,16 +32,25 @@ func update_movement():
 	input_vector = input_vector.clamped(1.0)
 	
 	if input_vector != Vector2.ZERO:
-		animationTree.set("parameters/Idle/blend_position", input_vector)
-		animationTree.set("parameters/Run/blend_position", input_vector)
-		AnimationState.travel("Run")
 		velocity += input_vector * SPEED
 		velocity = velocity.clamped(MAX_SPEED*input_vector.length())
 	else:
-		AnimationState.travel("Idle")
 		velocity = lerp(velocity, Vector2.ZERO, FRICTION)
-		
 	
+
+func update_animation(is_usingpad):
+	if not is_usingpad:
+		var mouse_vector = get_global_mouse_position() - global_position
+		mouse_vector = mouse_vector.normalized()
+		animationTree.set("parameters/Idle/blend_position", mouse_vector)
+		animationTree.set("parameters/Run/blend_position", mouse_vector)
+		if velocity.length() > 10:
+			AnimationState.travel("Run")
+		else:
+			AnimationState.travel("Idle")
+	else:
+		pass
+
 func update_lookat():
 	
 	var mouse_pos = get_global_mouse_position()
