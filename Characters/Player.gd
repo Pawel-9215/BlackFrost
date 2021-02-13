@@ -5,15 +5,53 @@ onready var animationTree = $AnimationTree
 onready var AnimationState = $AnimationTree.get("parameters/playback")
 var usingpad = false
 
+enum {
+	MOVE,
+	ROLL,
+	ATTACK,
+	BREAK,	
+}
+
+var state = MOVE
+
+signal attack
+
+func set_state(set_state):
+	var in_state = {
+		"move": MOVE,
+		"roll": ROLL,
+		"attack": ATTACK,
+		"break": BREAK
+	}
+	state = in_state[set_state]
+	
+
 func _ready():
-	print("Hello World")
+	pass
 	
 
 func _physics_process(_delta):
+	match state:
+		MOVE:
+			move_state()
+		ATTACK:
+			attack_state()
+		ROLL:
+			pass
+		BREAK:
+			pass
+	
+func move_state():
 	update_movement()
 	velocity = move_and_slide(velocity)
 	update_animation(usingpad)
-	update_lookat()
+	update_lookat(usingpad)
+	actions()
+	
+func attack_state():
+	velocity = lerp(velocity, Vector2.ZERO, FRICTION)
+	velocity = move_and_slide(velocity)
+	
 	
 func _input(event): # check if player is using gamepad or keyboard and mouse
 	if event is InputEventMouseMotion and usingpad:
@@ -22,6 +60,11 @@ func _input(event): # check if player is using gamepad or keyboard and mouse
 	elif event is InputEventJoypadMotion and not usingpad:
 		print("Joypad moved")
 		usingpad = true
+
+func actions():
+	if Input.is_action_pressed("Attack"):
+		emit_signal("attack")
+		state = ATTACK
 
 func update_movement():
 	
@@ -51,13 +94,15 @@ func update_animation(is_usingpad):
 	else:
 		pass
 
-func update_lookat():
-	
-	var mouse_pos = get_global_mouse_position()
-	
-	if mouse_pos.y < global_position.y:
-		$Hands.show_behind_parent = true
-	else:
-		$Hands.show_behind_parent = false
+func update_lookat(is_usingpad):
+	if not is_usingpad:
+		var mouse_pos = get_global_mouse_position()
 		
-	$Hands.look_at(mouse_pos)
+		if mouse_pos.y < global_position.y:
+			$Hands.show_behind_parent = true
+		else:
+			$Hands.show_behind_parent = false
+			
+		$Hands.look_at(mouse_pos)
+	else:
+		pass
