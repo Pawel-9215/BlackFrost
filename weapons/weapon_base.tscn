@@ -43,6 +43,7 @@ animations = [ {
 [sub_resource type="Animation" id=8]
 resource_name = "Attack"
 length = 0.51
+step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimatedSprite:animation")
 tracks/0/interp = 1
@@ -107,9 +108,11 @@ frames = SubResource( 7 )
 animation = "attack"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+visible = false
 polygon = PoolVector2Array( -11.8037, 8.42678, -14.3236, 11.8916, -5.88211, 15.0414, -0.653442, 15.8603, 4.76422, 15.6083, 11.4418, 13.9704, 14.9696, 10.5686, 15.9145, 6.34791, 6.96908, 4.08006, 2.05539, 5.84395, -3.23628, 6.15893, -8.90592, 5.025 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Idle"
+playback_process_mode = 0
 anims/Attack = SubResource( 8 )
 anims/Idle = SubResource( 9 )

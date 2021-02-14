@@ -16,6 +16,19 @@ var state = MOVE
 
 signal attack
 
+func _ready():
+	set_label()
+
+
+func set_label():
+	var labels_states = {
+		0:"move",
+		1:"roll",
+		2:"attack",
+		3:"break"
+	}
+	$Label.text = labels_states[state]
+
 func set_state(set_state):
 	var in_state = {
 		"move": MOVE,
@@ -24,12 +37,9 @@ func set_state(set_state):
 		"break": BREAK
 	}
 	state = in_state[set_state]
+	set_label()
 	
-
-func _ready():
-	pass
 	
-
 func _physics_process(_delta):
 	match state:
 		MOVE:
@@ -49,8 +59,12 @@ func move_state():
 	actions()
 	
 func attack_state():
+#	var mouse_vector = get_global_mouse_position() - global_position
+#	mouse_vector = mouse_vector.normalized()
 	velocity = lerp(velocity, Vector2.ZERO, FRICTION)
 	velocity = move_and_slide(velocity)
+#	animationTree.set("parameters/Attack/blend_position", mouse_vector)
+	AnimationState.travel("Attack")
 	
 	
 func _input(event): # check if player is using gamepad or keyboard and mouse
@@ -64,7 +78,7 @@ func _input(event): # check if player is using gamepad or keyboard and mouse
 func actions():
 	if Input.is_action_pressed("Attack"):
 		emit_signal("attack")
-		state = ATTACK
+		set_state("attack")
 
 func update_movement():
 	
@@ -87,6 +101,7 @@ func update_animation(is_usingpad):
 		mouse_vector = mouse_vector.normalized()
 		animationTree.set("parameters/Idle/blend_position", mouse_vector)
 		animationTree.set("parameters/Run/blend_position", mouse_vector)
+		animationTree.set("parameters/Attack/blend_position", mouse_vector)
 		if velocity.length() > 10:
 			AnimationState.travel("Run")
 		else:
