@@ -94,6 +94,7 @@ Attack={
 2d_physics/layer_3="Walls"
 2d_physics/layer_4="Items"
 2d_physics/layer_5="WeponHitboxes"
+2d_physics/layer_6="Hurtboxes"
 
 [rendering]
 
