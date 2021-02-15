@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/swoosh5.wav-3d60e07be496c1b72de86bf54bf2055e.sample"
+
+[deps]
+
+source_file="res://SFX/swooshes/swoosh5.wav"
+dest_files=[ "res://.import/swoosh5.wav-3d60e07be496c1b72de86bf54bf2055e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

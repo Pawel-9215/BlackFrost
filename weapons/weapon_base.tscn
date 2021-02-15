@@ -131,4 +131,6 @@ playback_process_mode = 0
 anims/Attack = SubResource( 8 )
 anims/Idle = SubResource( 9 )
 
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+
 [editable path="Hitbox"]

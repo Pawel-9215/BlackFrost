@@ -6,6 +6,7 @@ extends Node2D
 # var b = "text"
 onready var player = get_owner()
 var is_attacking = false
+onready var audioplayer = $AudioStreamPlayer2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -13,6 +14,7 @@ func _ready():
 
 
 func _on_Player_attack():
+	play_swoosh()
 	if not is_attacking:
 		is_attacking = true
 		print("Attack!")
@@ -24,3 +26,9 @@ func end_attack():
 	player.set_state("move")
 	print("End attack")
 	is_attacking = false
+
+func play_swoosh():
+	var name = "swoosh" + str(randi() % 5 + 1) + ".wav"
+	audioplayer.stream = load("res://SFX/swooshes/"+name)
+	audioplayer.play()
+	print(name)
