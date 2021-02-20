@@ -6,95 +6,94 @@
 [ext_resource path="res://GFX/world/misc/barrel-sheet.png" type="Texture" id=4]
 [ext_resource path="res://SFX/thump/thump.wav" type="AudioStream" id=5]
 
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
 region = Rect2( 0, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=8]
+[sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=9]
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 4 )
 region = Rect2( 32, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=10]
+[sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 4 )
 region = Rect2( 64, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=11]
+[sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 4 )
 region = Rect2( 96, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 32, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=13]
+[sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 4 )
 region = Rect2( 32, 32, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=14]
+[sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 4 )
 region = Rect2( 64, 32, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=15]
+[sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 4 )
 region = Rect2( 96, 32, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=16]
+[sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 4 )
 region = Rect2( 0, 64, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=17]
+[sub_resource type="AtlasTexture" id=12]
 atlas = ExtResource( 4 )
 region = Rect2( 32, 64, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=18]
+[sub_resource type="AtlasTexture" id=13]
 atlas = ExtResource( 4 )
 region = Rect2( 64, 64, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=19]
+[sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 4 )
 region = Rect2( 96, 64, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 4 )
-region = Rect2( 0, 0, 32, 32 )
-
-[sub_resource type="SpriteFrames" id=7]
+[sub_resource type="SpriteFrames" id=15]
 animations = [ {
-"frames": [ SubResource( 6 ) ],
+"frames": [ SubResource( 1 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ) ],
-"loop": true,
-"name": "destroy",
-"speed": 12.0
-}, {
-"frames": [ SubResource( 20 ) ],
+"frames": [ SubResource( 2 ) ],
 "loop": true,
 "name": "hurt",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ) ],
+"loop": true,
+"name": "destroy",
+"speed": 12.0
 } ]
 
-[sub_resource type="CapsuleShape2D" id=1]
+[sub_resource type="CapsuleShape2D" id=16]
 radius = 11.9714
 height = 1.18853
 
-[sub_resource type="CapsuleShape2D" id=2]
+[sub_resource type="CapsuleShape2D" id=17]
 radius = 12.3821
 height = 5.69114
 
-[sub_resource type="Curve" id=3]
+[sub_resource type="Curve" id=18]
 max_value = 494.83
 bake_resolution = 202
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.145329, 494.83 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="Animation" id=4]
-resource_name = "hit"
+[sub_resource type="Animation" id=19]
 length = 0.2
 step = 0.01
 tracks/0/type = "value"
@@ -122,8 +121,7 @@ tracks/1/keys = {
 "values": [ "idle" ]
 }
 
-[sub_resource type="Animation" id=5]
-resource_name = "idle"
+[sub_resource type="Animation" id=20]
 tracks/0/type = "value"
 tracks/0/path = NodePath("../Sprite:rotation_degrees")
 tracks/0/interp = 1
@@ -144,19 +142,20 @@ script = ExtResource( 3 )
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -8 )
-frames = SubResource( 7 )
+frames = SubResource( 15 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( -0.178185, -3.83086 )
-shape = SubResource( 1 )
+shape = SubResource( 16 )
 
 [node name="Hurtbox" parent="." instance=ExtResource( 2 )]
+collision_mask = 80
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
 visible = false
 position = Vector2( -0.0707111, -7.56604 )
-shape = SubResource( 2 )
+shape = SubResource( 17 )
 
 [node name="HitParticles" type="CPUParticles2D" parent="."]
 position = Vector2( 0, -5.12267 )
@@ -180,7 +179,7 @@ angular_velocity = 38.4
 angular_velocity_random = 0.41
 damping = 100.0
 damping_random = 0.17
-damping_curve = SubResource( 3 )
+damping_curve = SubResource( 18 )
 scale_amount = 4.5
 scale_amount_random = 0.38
 color = Color( 0.266667, 0.184314, 0.113725, 1 )
@@ -189,8 +188,8 @@ hue_variation_random = 0.1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Sprite")
-anims/hit = SubResource( 4 )
-anims/idle = SubResource( 5 )
+anims/hit = SubResource( 19 )
+anims/idle = SubResource( 20 )
 
 [node name="Audio" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 5 )

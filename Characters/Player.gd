@@ -9,7 +9,8 @@ enum {
 	MOVE,
 	ROLL,
 	ATTACK,
-	BREAK,	
+	BREAK,
+	KNOCKBACK,
 }
 
 var state = MOVE
