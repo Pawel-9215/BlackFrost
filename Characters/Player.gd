@@ -4,6 +4,7 @@ var velocity = Vector2()
 onready var animationTree = $AnimationTree
 onready var AnimationState = $AnimationTree.get("parameters/playback")
 var usingpad = false
+onready var stats = $Stats
 
 enum {
 	MOVE,
@@ -19,6 +20,7 @@ signal attack
 
 func _ready():
 	set_label()
+	$Hands/WeaponBase.damage = stats.stats["damage"]
 
 
 func set_label():

@@ -25,6 +25,7 @@ func set_state(set_state):
 		"death": DEATH,
 	}
 	state = in_state[set_state]
+	print(set_state)
 	
 	
 func _physics_process(_delta):
@@ -51,15 +52,25 @@ func attack_state():
 
 func _on_Hurtbox_area_entered(area):
 	var area_position = area.get_owner().get_global_position()
-	hurt(area_position)
+	var damage = area.damage
+	print(damage)
+	hurt(area_position, damage)
 
-func hurt(area_pos):
-	stats.current_health -= 4
+func hurt(area_pos, damage):
+	stats.current_health -= damage
 	print("Auch!!!")
 	velocity = ($AnimatedSprite.global_position - area_pos).normalized() * KNOCKBACK_FORCE
 	if stats.current_health > 0:
 		set_state("knockback")
+		$Speech.stream = load("res://SFX/characters/growls/growl1_hurt.wav")
+		$Speech.play()
+		$Sounds.stream = load("res://SFX/thump/hit_metal.wav")
+		$Sounds.play()
 	else:
+		$Speech.stream = load("res://SFX/characters/growls/growl1_die.wav")
+		$Speech.play()
+		$Sounds.stream = load("res://SFX/thump/hit_meat.wav")
+		$Sounds.play()
 		set_collision_mask_bit(0, false)
 		z_index -= 1
 		set_state("death")
@@ -70,7 +81,7 @@ func hurt(area_pos):
 func knockback_state():
 	
 	velocity = lerp(velocity, Vector2.ZERO, FRICTION)
-	print(velocity)
+	#print(velocity)
 	velocity = move_and_slide(velocity)
 	if velocity.length()<= 5:
 		print("done")
@@ -78,3 +89,7 @@ func knockback_state():
 		set_state("move")
 	
 	
+
+
+func _on_Stats_no_health():
+	$Hurtbox.queue_free()

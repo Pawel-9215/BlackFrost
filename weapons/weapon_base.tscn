@@ -132,5 +132,6 @@ anims/Attack = SubResource( 8 )
 anims/Idle = SubResource( 9 )
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+bus = "sounds"
 
 [editable path="Hitbox"]

@@ -1,10 +1,11 @@
-[gd_scene load_steps=70 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://GFX/player/player1.png" type="Texture" id=1]
 [ext_resource path="res://Characters/Player.gd" type="Script" id=2]
 [ext_resource path="res://GFX/lightmaps/circural_b.png" type="Texture" id=3]
 [ext_resource path="res://GFX/lightmaps/shadow.png" type="Texture" id=4]
 [ext_resource path="res://weapons/weapon_base.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Characters/Stats.tscn" type="PackedScene" id=6]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
@@ -12,31 +13,31 @@ region = Rect2( 0, 64, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 32, 32, 32 )
+region = Rect2( 224, 64, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 1 )
-region = Rect2( 32, 32, 32, 32 )
+region = Rect2( 224, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 1 )
-region = Rect2( 64, 32, 32, 32 )
+region = Rect2( 224, 32, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 1 )
-region = Rect2( 224, 64, 32, 32 )
+region = Rect2( 0, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 32, 32 )
+region = Rect2( 32, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 1 )
-region = Rect2( 32, 0, 32, 32 )
+region = Rect2( 64, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 1 )
-region = Rect2( 64, 0, 32, 32 )
+region = Rect2( 0, 0, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 1 )
@@ -56,15 +57,15 @@ region = Rect2( 0, 32, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=13]
 atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 32, 32 )
+region = Rect2( 0, 32, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=14]
 atlas = ExtResource( 1 )
-region = Rect2( 224, 0, 32, 32 )
+region = Rect2( 32, 32, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=15]
 atlas = ExtResource( 1 )
-region = Rect2( 224, 32, 32, 32 )
+region = Rect2( 64, 32, 32, 32 )
 
 [sub_resource type="SpriteFrames" id=16]
 animations = [ {
@@ -73,20 +74,30 @@ animations = [ {
 "name": "Idleright",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ) ],
-"loop": true,
-"name": "Runup",
-"speed": 12.0
-}, {
-"frames": [ SubResource( 5 ) ],
+"frames": [ SubResource( 2 ) ],
 "loop": true,
 "name": "attack_right",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ) ],
+"frames": [ SubResource( 3 ) ],
+"loop": true,
+"name": "attack_down",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 4 ) ],
+"loop": true,
+"name": "attack_up",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
 "loop": true,
 "name": "Rundown",
 "speed": 12.0
+}, {
+"frames": [ SubResource( 8 ) ],
+"loop": true,
+"name": "Idledown",
+"speed": 5.0
 }, {
 "frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
 "loop": true,
@@ -98,20 +109,10 @@ animations = [ {
 "name": "Idleup",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 13 ) ],
+"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ) ],
 "loop": true,
-"name": "Idledown",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 14 ) ],
-"loop": true,
-"name": "attack_down",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 15 ) ],
-"loop": true,
-"name": "attack_up",
-"speed": 5.0
+"name": "Runup",
+"speed": 12.0
 } ]
 
 [sub_resource type="CapsuleShape2D" id=17]
@@ -743,9 +744,8 @@ texture = ExtResource( 4 )
 [node name="BodySprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -9.599 )
 frames = SubResource( 16 )
-animation = "attack_down"
+animation = "Idledown"
 playing = true
-flip_h = true
 __meta__ = {
 "_editor_description_": ""
 }
@@ -824,5 +824,12 @@ size_flags_stretch_ratio = 0.5
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
+}
+
+[node name="Stats" parent="." instance=ExtResource( 6 )]
+stats = {
+"damage": 4,
+"durability": 12,
+"health": 20
 }
 [connection signal="attack" from="." to="Hands/WeaponBase" method="_on_Player_attack"]
