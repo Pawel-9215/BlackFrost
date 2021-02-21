@@ -1,55 +1,60 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Characters/TemplateCharacter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://GFX/lightmaps/shadow.png" type="Texture" id=2]
 [ext_resource path="res://Hurt_Hit_boxes/Hurtbox.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Characters/Draugir.gd" type="Script" id=4]
 [ext_resource path="res://GFX/characters/draugir/draugir_animations.png" type="Texture" id=5]
+[ext_resource path="res://Characters/Stats.tscn" type="PackedScene" id=6]
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 5 )
 region = Rect2( 0, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 5 )
 region = Rect2( 96, 128, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 5 )
 region = Rect2( 128, 128, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=7]
+[sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 5 )
 region = Rect2( 160, 128, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=8]
+[sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 5 )
 region = Rect2( 0, 160, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=9]
+[sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 5 )
 region = Rect2( 32, 160, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=10]
+[sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 5 )
 region = Rect2( 64, 160, 32, 32 )
 
-[sub_resource type="SpriteFrames" id=2]
+[sub_resource type="SpriteFrames" id=8]
 animations = [ {
-"frames": [ SubResource( 4 ) ],
+"frames": [ SubResource( 1 ) ],
 "loop": true,
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ) ],
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
 "loop": false,
 "name": "death",
-"speed": 5.0
+"speed": 12.0
 } ]
 
-[sub_resource type="CapsuleShape2D" id=3]
+[sub_resource type="CapsuleShape2D" id=9]
 radius = 5.73613
 height = 8.79128
+
+[sub_resource type="Curve" id=10]
+min_value = -1.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.866426 ), 0.0, 0.0, 0, 0 ]
 
 [node name="Draugir" instance=ExtResource( 1 )]
 collision_layer = 2
@@ -63,7 +68,7 @@ scale = Vector2( 0.816, 0.933 )
 texture = ExtResource( 2 )
 
 [node name="AnimatedSprite" parent="." index="1"]
-frames = SubResource( 2 )
+frames = SubResource( 8 )
 animation = "idle"
 playing = true
 
@@ -77,7 +82,51 @@ scale = Vector2( 0.816, 0.933 )
 collision_mask = 64
 
 [node name="CollisionShape2D" parent="Hurtbox" index="0"]
-shape = SubResource( 3 )
+shape = SubResource( 9 )
+
+[node name="blood" type="CPUParticles2D" parent="." index="4"]
+position = Vector2( 0.377975, -9.32341 )
+emitting = false
+amount = 26
+one_shot = true
+explosiveness = 1.0
+randomness = 0.36
+lifetime_randomness = 0.36
+emission_shape = 1
+emission_sphere_radius = 4.34
+direction = Vector2( 1, 1 )
+spread = 81.0
+gravity = Vector2( 0, 96.816 )
+initial_velocity = 83.87
+initial_velocity_random = 0.39
+damping = 11.25
+damping_random = 0.29
+color = Color( 0.823529, 0.0705882, 0.0705882, 1 )
+hue_variation = 0.11
+hue_variation_curve = SubResource( 10 )
+
+[node name="gushing" type="CPUParticles2D" parent="." index="5"]
+position = Vector2( 3.77592, -1.20609 )
+emitting = false
+amount = 40
+lifetime = 2.0
+one_shot = true
+randomness = 0.1
+lifetime_randomness = 0.36
+emission_shape = 1
+emission_sphere_radius = 2.0
+direction = Vector2( 0, -1 )
+spread = 2.74
+gravity = Vector2( 0, 50 )
+initial_velocity = 70.0
+initial_velocity_random = 0.39
+damping = 45.75
+damping_random = 0.29
+color = Color( 0.823529, 0.0705882, 0.0705882, 1 )
+hue_variation = 0.11
+hue_variation_curve = SubResource( 10 )
+
+[node name="Stats" parent="." index="6" instance=ExtResource( 6 )]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 
 [editable path="Hurtbox"]

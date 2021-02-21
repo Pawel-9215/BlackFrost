@@ -863,11 +863,13 @@ color = Color( 0.117647, 0.137255, 0.168627, 1 )
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 89.5646, 108.722 )
 scale = Vector2( 29.8008, 21.3678 )
+z_index = -3
 texture = ExtResource( 3 )
 region_enabled = true
 region_rect = Rect2( 192, 224, 32, 32 )
 
 [node name="TileMap" type="TileMap" parent="."]
+z_index = -2
 tile_set = SubResource( 139 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 4

@@ -1,8 +1,8 @@
 extends "res://Characters/TemplateCharacter.gd"
 
-const KNOCKBACK_FORCE = 100
+const KNOCKBACK_FORCE = 150
 
-export var health = 20
+onready var stats = $Stats
 var velocity = Vector2()
 
 enum {
@@ -43,6 +43,8 @@ func move_state():
 
 func death_state():
 	$AnimatedSprite.play("death")
+	if $AnimatedSprite.frame == 5:
+		$AnimatedSprite.stop()
 
 func attack_state():
 	pass
@@ -52,12 +54,18 @@ func _on_Hurtbox_area_entered(area):
 	hurt(area_position)
 
 func hurt(area_pos):
+	stats.current_health -= 4
 	print("Auch!!!")
 	velocity = ($AnimatedSprite.global_position - area_pos).normalized() * KNOCKBACK_FORCE
-	if health > 0:
+	if stats.current_health > 0:
 		set_state("knockback")
 	else:
+		set_collision_mask_bit(0, false)
+		z_index -= 1
 		set_state("death")
+		$gushing.restart()
+	$blood.direction = ($AnimatedSprite.global_position - area_pos).normalized()
+	$blood.restart()
 	
 func knockback_state():
 	
