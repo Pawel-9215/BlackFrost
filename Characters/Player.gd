@@ -20,7 +20,7 @@ signal attack
 
 func _ready():
 	set_label()
-	$Hands/WeaponBase.damage = stats.stats["damage"]
+	$Hands/WeaponBase.set_stats(stats.character_sheet["damage"])
 
 
 func set_label():

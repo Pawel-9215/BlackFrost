@@ -6,6 +6,9 @@ onready var stats = $Stats
 var velocity = Vector2()
 
 enum {
+	IDLE,
+	CHASE,
+	WANDER,
 	MOVE,
 	ATTACK,
 	KNOCKBACK,
@@ -19,6 +22,9 @@ func _ready():
 
 func set_state(set_state):
 	var in_state = {
+		"idle": IDLE,
+		"wander": WANDER,
+		"chase": CHASE,
 		"move": MOVE,
 		"attack": ATTACK,
 		"knockback": KNOCKBACK,
@@ -38,6 +44,20 @@ func _physics_process(_delta):
 			knockback_state()
 		DEATH:
 			death_state()
+		IDLE:
+			pass
+		WANDER:
+			pass
+		CHASE:
+			pass
+			
+
+func idle(): 
+	velocity = lerp(velocity, Vector2.ZERO, FRICTION)
+	velocity = move_and_slide(velocity)
+	
+func seek_player():
+	pass
 
 func move_state():
 	velocity = move_and_slide(velocity)
@@ -73,6 +93,7 @@ func hurt(area_pos, damage):
 		$Sounds.play()
 		set_collision_mask_bit(0, false)
 		z_index -= 1
+		$Shadow.queue_free()
 		set_state("death")
 		$gushing.restart()
 	$blood.direction = ($AnimatedSprite.global_position - area_pos).normalized()

@@ -1,6 +1,6 @@
 extends Node
 
-export var stats = {"health": 20,
+export var character_sheet = {"health": 20,
 	"durability": 12,
 	"damage": 2}
 var current_health setget set_health
@@ -9,7 +9,7 @@ signal no_health
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	current_health = stats["health"]
+	current_health = character_sheet["health"]
 	
 func set_health(value):
 	current_health = value

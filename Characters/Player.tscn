@@ -827,7 +827,7 @@ __meta__ = {
 }
 
 [node name="Stats" parent="." instance=ExtResource( 6 )]
-stats = {
+character_sheet = {
 "damage": 4,
 "durability": 12,
 "health": 20

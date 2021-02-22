@@ -7,13 +7,16 @@ extends Node2D
 onready var player = get_owner()
 var is_attacking = false
 onready var audioplayer = $AudioStreamPlayer2D
-onready var damage
+onready var hitbox = $Hitbox
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print(player.name)
-	$Hitbox.damage = damage
 
+func set_stats(stats):
+	#mix player characteristic and weapon 
+	#characteristics to calculate damage
+	hitbox.set_damage(stats)
 
 func _on_Player_attack():
 	play_swoosh()
