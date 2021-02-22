@@ -4,6 +4,7 @@ const KNOCKBACK_FORCE = 150
 
 onready var stats = $Stats
 var velocity = Vector2()
+var player_detected = false
 
 enum {
 	IDLE,
@@ -34,7 +35,7 @@ func set_state(set_state):
 	print(set_state)
 	
 	
-func _physics_process(_delta):
+func _physics_process(delta):
 	match state:
 		MOVE:
 			move_state()
@@ -49,8 +50,21 @@ func _physics_process(_delta):
 		WANDER:
 			pass
 		CHASE:
-			pass
+			chase_player(delta)
 			
+func find_default_state():
+	if player_detected:
+		set_state("chase")
+	else:
+		set_state("idle")
+
+func chase_player(delta):
+	var player = $PlayerDetection.player
+	if player != null:
+		var direction = (player.global_position - global_position).normalized()
+		velocity = velocity.move_toward(direction*MAX_SPEED, SPEED * 3 * delta)
+		velocity = move_and_slide(velocity)
+		#$PlayerDetection.rotation = direction.get_angle_to()
 
 func idle(): 
 	velocity = lerp(velocity, Vector2.ZERO, FRICTION)
@@ -96,6 +110,7 @@ func hurt(area_pos, damage):
 		$Shadow.queue_free()
 		set_state("death")
 		$gushing.restart()
+		$PlayerDetection.queue_free()
 	$blood.direction = ($AnimatedSprite.global_position - area_pos).normalized()
 	$blood.restart()
 	
@@ -107,10 +122,19 @@ func knockback_state():
 	if velocity.length()<= 5:
 		print("done")
 		velocity = Vector2.ZERO
-		set_state("move")
+		find_default_state()
 	
 	
 
 
 func _on_Stats_no_health():
 	$Hurtbox.queue_free()
+
+
+func _on_PlayerDetection_player_status(status):
+	player_detected = status
+	print("Player detection: ", status)
+	if status:
+		set_state("chase")
+	else:
+		set_state("idle")
