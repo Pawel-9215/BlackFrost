@@ -16,10 +16,11 @@ enum {
 	DEATH,
 }
 
-var state = MOVE
+var state = IDLE
 
 func _ready():
-	pass # Replace with function body.
+	SPEED = 5 
+	MAX_SPEED = 75
 
 func set_state(set_state):
 	var in_state = {
@@ -32,7 +33,7 @@ func set_state(set_state):
 		"death": DEATH,
 	}
 	state = in_state[set_state]
-	print(set_state)
+	$Animations.changed_state(state)
 	
 	
 func _physics_process(delta):
@@ -57,17 +58,32 @@ func find_default_state():
 		set_state("chase")
 	else:
 		set_state("idle")
+		
+func get_state():
+	return state
+		
+func update_movement(input_vector: Vector2):
+	
+	input_vector = input_vector.clamped(1.0)
+	
+	if input_vector != Vector2.ZERO:
+		velocity += input_vector * SPEED
+		velocity = velocity.clamped(MAX_SPEED*input_vector.length())
+	else:
+		velocity = lerp(velocity, Vector2.ZERO, FRICTION)
 
 func chase_player(delta):
 	var player = $PlayerDetection.player
 	if player != null:
-		var direction = (player.global_position - global_position).normalized()
-		velocity = velocity.move_toward(direction*MAX_SPEED, SPEED * 3 * delta)
+		var direction = (player.global_position - global_position)
+		$PlayerDetection.look_at(player.global_position)
+		$PlayerDetection.rotate(deg2rad(-90))
+		update_movement(direction)
 		velocity = move_and_slide(velocity)
 		#$PlayerDetection.rotation = direction.get_angle_to()
 
 func idle(): 
-	velocity = lerp(velocity, Vector2.ZERO, FRICTION)
+	update_movement(Vector2.ZERO)
 	velocity = move_and_slide(velocity)
 	
 func seek_player():
@@ -77,9 +93,7 @@ func move_state():
 	velocity = move_and_slide(velocity)
 
 func death_state():
-	$AnimatedSprite.play("death")
-	if $AnimatedSprite.frame == 5:
-		$AnimatedSprite.stop()
+	pass
 
 func attack_state():
 	pass
@@ -93,7 +107,7 @@ func _on_Hurtbox_area_entered(area):
 func hurt(area_pos, damage):
 	stats.current_health -= damage
 	print("Auch!!!")
-	velocity = ($AnimatedSprite.global_position - area_pos).normalized() * KNOCKBACK_FORCE
+	velocity = ($Animations/AnimatedSprite.global_position - area_pos).normalized() * KNOCKBACK_FORCE
 	if stats.current_health > 0:
 		set_state("knockback")
 		$Speech.stream = load("res://SFX/characters/growls/growl1_hurt.wav")
@@ -111,7 +125,7 @@ func hurt(area_pos, damage):
 		set_state("death")
 		$gushing.restart()
 		$PlayerDetection.queue_free()
-	$blood.direction = ($AnimatedSprite.global_position - area_pos).normalized()
+	$blood.direction = ($Animations/AnimatedSprite.global_position - area_pos).normalized()
 	$blood.restart()
 	
 func knockback_state():
