@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://Characters/TemplateCharacter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://GFX/lightmaps/shadow.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Characters/Stats.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Characters/character_modules/PlayerDetection.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Characters/Animations.gd" type="Script" id=8]
+[ext_resource path="res://weapons/weapon_base.tscn" type="PackedScene" id=9]
 
 [sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 5 )
@@ -172,6 +173,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id=30]
 resource_name = "Idle_right"
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("AnimatedSprite:animation")
 tracks/0/interp = 1
@@ -230,6 +232,21 @@ tracks/0/keys = {
 "values": [ "run_right" ]
 }
 
+[sub_resource type="Animation" id=51]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "death" ]
+}
+
 [sub_resource type="Animation" id=34]
 resource_name = "run_up"
 tracks/0/type = "value"
@@ -269,16 +286,16 @@ blend_point_3/pos = Vector2( -1, 0 )
 blend_mode = 1
 
 [sub_resource type="AnimationNodeAnimation" id=40]
-animation = "Idle_down"
+animation = "Run_down"
 
 [sub_resource type="AnimationNodeAnimation" id=41]
-animation = "Idle_up"
+animation = "run_up"
 
 [sub_resource type="AnimationNodeAnimation" id=42]
-animation = "Idle_right"
+animation = "Run_right"
 
 [sub_resource type="AnimationNodeAnimation" id=43]
-animation = "Idle_right"
+animation = "Run_right"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id=44]
 blend_point_0/node = SubResource( 40 )
@@ -291,16 +308,23 @@ blend_point_3/node = SubResource( 43 )
 blend_point_3/pos = Vector2( -1, 0 )
 blend_mode = 1
 
+[sub_resource type="AnimationNodeAnimation" id=52]
+animation = "die"
+
 [sub_resource type="AnimationNodeStateMachineTransition" id=45]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=46]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=53]
 
 [sub_resource type="AnimationNodeStateMachine" id=47]
 states/Idle/node = SubResource( 39 )
 states/Idle/position = Vector2( 433.4, 85.4 )
 states/Run/node = SubResource( 44 )
-states/Run/position = Vector2( 675, 85.88 )
-transitions = [ "Idle", "Run", SubResource( 45 ), "Run", "Idle", SubResource( 46 ) ]
+states/Run/position = Vector2( 675, 85.496 )
+states/die/node = SubResource( 52 )
+states/die/position = Vector2( 434.2, 190.2 )
+transitions = [ "Idle", "Run", SubResource( 45 ), "Run", "Idle", SubResource( 46 ), "Idle", "die", SubResource( 53 ) ]
 start_node = "Idle"
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=48]
@@ -334,11 +358,13 @@ animation = "idle_up"
 playing = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Animations" index="1"]
+autoplay = "Idle_down"
 anims/Idle_down = SubResource( 29 )
 anims/Idle_right = SubResource( 30 )
 anims/Idle_up = SubResource( 31 )
 anims/Run_down = SubResource( 32 )
 anims/Run_right = SubResource( 33 )
+anims/die = SubResource( 51 )
 anims/run_up = SubResource( 34 )
 
 [node name="AnimationTree" type="AnimationTree" parent="Animations" index="2"]
@@ -349,6 +375,17 @@ process_mode = 0
 parameters/playback = SubResource( 48 )
 parameters/Idle/blend_position = Vector2( 0, 0 )
 parameters/Run/blend_position = Vector2( 0, 0 )
+
+[node name="Label" type="Label" parent="Animations" index="3"]
+margin_left = -19.5162
+margin_top = -35.3553
+margin_right = 20.4838
+margin_bottom = -21.3553
+text = "test"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CollisionShape2D" parent="." index="2"]
 visible = false
@@ -370,6 +407,7 @@ one_shot = true
 explosiveness = 0.91
 randomness = 0.24
 lifetime_randomness = 0.36
+local_coords = false
 emission_shape = 1
 emission_sphere_radius = 4.34
 direction = Vector2( 1, 1 )
@@ -391,6 +429,7 @@ lifetime = 2.0
 one_shot = true
 randomness = 0.1
 lifetime_randomness = 0.36
+local_coords = false
 emission_shape = 1
 emission_sphere_radius = 2.0
 direction = Vector2( 0, -1 )
@@ -415,6 +454,13 @@ position = Vector2( 1.38898, -5.05982 )
 bus = "sounds"
 
 [node name="PlayerDetection" parent="." index="9" instance=ExtResource( 7 )]
+
+[node name="Hands" type="Node2D" parent="." index="10"]
+position = Vector2( 0.873072, -9.44504 )
+rotation = 1.5708
+
+[node name="WeaponBase" parent="Hands" index="0" instance=ExtResource( 9 )]
+rotation = -1.5708
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 [connection signal="no_health" from="Stats" to="." method="_on_Stats_no_health"]
 [connection signal="player_status" from="PlayerDetection" to="." method="_on_PlayerDetection_player_status"]

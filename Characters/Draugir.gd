@@ -6,6 +6,8 @@ onready var stats = $Stats
 var velocity = Vector2()
 var player_detected = false
 
+signal attack
+
 enum {
 	IDLE,
 	CHASE,
@@ -47,7 +49,7 @@ func _physics_process(delta):
 		DEATH:
 			death_state()
 		IDLE:
-			pass
+			idle()
 		WANDER:
 			pass
 		CHASE:
@@ -80,7 +82,10 @@ func chase_player(_delta):
 		$PlayerDetection.rotate(deg2rad(-90))
 		update_movement(direction)
 		velocity = move_and_slide(velocity)
+		update_look_at()
 		#$PlayerDetection.rotation = direction.get_angle_to()
+	else:
+		set_state('idle')
 
 func idle(): 
 	update_movement(Vector2.ZERO)
@@ -96,7 +101,11 @@ func death_state():
 	pass
 
 func attack_state():
-	pass
+	
+	#	var mouse_vector = get_global_mouse_position() - global_position
+	#	mouse_vector = mouse_vector.normalized()
+	velocity = lerp(velocity, Vector2.ZERO, FRICTION)
+	velocity = move_and_slide(velocity)
 
 func _on_Hurtbox_area_entered(area):
 	var area_position = area.get_owner().get_global_position()
@@ -152,3 +161,7 @@ func _on_PlayerDetection_player_status(status):
 		set_state("chase")
 	else:
 		set_state("idle")
+
+func update_look_at():
+	if player_detected and ($PlayerDetection.player != null):
+		$Hands.look_at($PlayerDetection.player.global_position)

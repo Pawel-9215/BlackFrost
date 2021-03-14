@@ -15,6 +15,8 @@ onready var velocity = character.velocity
 onready var animationTree = $AnimationTree
 onready var AnimationState = $AnimationTree.get("parameters/playback")
 
+var alive = true
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -22,11 +24,12 @@ func _ready():
 
 # warning-ignore:unused_argument
 func _physics_process(_delta):
-	update_animation()
-	if character.velocity.x < 0:
-		$AnimatedSprite.flip_h = true
-	else:
-		$AnimatedSprite.flip_h = false
+	if alive:
+		update_animation()
+		if character.velocity.x < 0:
+			$AnimatedSprite.flip_h = true
+		else:
+			$AnimatedSprite.flip_h = false
 
 func update_animation():
 	velocity = character.velocity
@@ -35,14 +38,18 @@ func update_animation():
 	animationTree.set("parameters/Idle/blend_position", velocity.normalized())
 	animationTree.set("parameters/Run/blend_position", velocity.normalized())
 	# animationTree.set("parameters/Attack/blend_position", mouse_vector)
+	# print(velocity)
 	if velocity.length() > 5:
 		AnimationState.travel("Run")
+		$Label.text = ("Run")
 	else:
 		AnimationState.travel("Idle")
+		$Label.text = ("Idle")
 		
 func changed_state(state):
 	if state == DEATH:
-		$AnimatedSprite.play("death")
+		alive = false
+		AnimationState.travel("die")
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass

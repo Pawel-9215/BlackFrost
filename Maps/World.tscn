@@ -881,7 +881,7 @@ tile_data = PoolIntArray( -131076, 0, 196608, -131075, 0, 196609, -131074, 0, 26
 [node name="YSort" type="YSort" parent="."]
 
 [node name="Player" parent="YSort" instance=ExtResource( 1 )]
-position = Vector2( -79.1286, 50.6585 )
+position = Vector2( -78.8289, 51.2578 )
 
 [node name="CandleStand" parent="YSort" instance=ExtResource( 2 )]
 position = Vector2( 176, 144 )
@@ -896,9 +896,6 @@ position = Vector2( -40, 88 )
 
 [node name="Draugir" parent="YSort/Mobs" instance=ExtResource( 5 )]
 position = Vector2( 3.20361, 21.8914 )
-
-[node name="Draugir2" parent="YSort/Mobs" instance=ExtResource( 5 )]
-position = Vector2( -48.7217, 122.972 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
