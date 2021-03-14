@@ -33,7 +33,7 @@ func set_state(set_state):
 		"death": DEATH,
 	}
 	state = in_state[set_state]
-	$Animations.changed_state(state)
+	$Animations.changed_state(state) #this most likely should be a signal
 	
 	
 func _physics_process(delta):
@@ -72,7 +72,7 @@ func update_movement(input_vector: Vector2):
 	else:
 		velocity = lerp(velocity, Vector2.ZERO, FRICTION)
 
-func chase_player(delta):
+func chase_player(_delta):
 	var player = $PlayerDetection.player
 	if player != null:
 		var direction = (player.global_position - global_position)
